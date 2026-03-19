@@ -19,8 +19,8 @@ export default {
 			}
 		},
 		fontFamily: {
-			cormorant: ['Cormorant', 'serif'],
-			golos: ['Golos Text', 'sans-serif'],
+			montserrat: ['Montserrat', 'sans-serif'],
+			roboto: ['Roboto', 'sans-serif'],
 		},
 		extend: {
 			colors: {

@@ -61,6 +61,7 @@ interface Comment {
 const INITIAL_COMMENTS: Comment[] = [
   { name: "Андрей К.", text: "Невероятные впечатления! Экскурсовод знает каждый камень. Обязательно вернёмся.", date: "12 марта 2026" },
   { name: "Мария С.", text: "Ночной тур — это отдельная история. Атмосфера просто фантастическая.", date: "5 марта 2026" },
+  { name: "Семья Петровых", text: "Приехали с детьми — дети в восторге! Детский гид очень понятно объяснял. Спасибо!", date: "1 марта 2026" },
 ];
 
 export default function Index() {
@@ -81,149 +82,209 @@ export default function Index() {
   };
 
   return (
-    <div className="bg-[#0e0e0e] text-[#e8e0d0] font-golos min-h-screen">
+    <div className="bg-white text-[#1a1a2e] font-roboto min-h-screen">
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4"
-        style={{ background: "linear-gradient(to bottom, rgba(14,14,14,0.95) 0%, transparent 100%)" }}>
-        <a href="#" className="font-cormorant text-xl font-semibold tracking-[0.15em] uppercase text-[#c8a96e]">
-          Форт Крым
-        </a>
-        <ul className="hidden md:flex gap-8">
-          {NAV_LINKS.map(l => (
-            <li key={l.href}>
-              <a href={l.href}
-                className="text-sm tracking-widest uppercase text-[#a09880] hover:text-[#c8a96e] transition-colors duration-300">
-                {l.label}
+      {/* HEADER */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        {/* Top bar */}
+        <div className="bg-[#1a1a2e] text-white py-2 px-4 md:px-8">
+          <div className="max-w-6xl mx-auto flex items-center justify-between text-xs">
+            <div className="flex items-center gap-6">
+              <a href="tel:+70000000000" className="flex items-center gap-1.5 hover:text-[#e8b84b] transition-colors">
+                <Icon name="Phone" size={12} />
+                +7 (000) 000-00-00
               </a>
-            </li>
-          ))}
-        </ul>
-        <button className="md:hidden text-[#c8a96e]" onClick={() => setMenuOpen(!menuOpen)}>
-          <Icon name={menuOpen ? "X" : "Menu"} size={24} />
-        </button>
-      </nav>
+              <a href="mailto:info@fort-krym.ru" className="hidden md:flex items-center gap-1.5 hover:text-[#e8b84b] transition-colors">
+                <Icon name="Mail" size={12} />
+                info@fort-krym.ru
+              </a>
+            </div>
+            <div className="flex items-center gap-1 text-gray-400">
+              <Icon name="MapPin" size={12} />
+              <span className="hidden sm:inline">Республика Крым</span>
+            </div>
+          </div>
+        </div>
+        {/* Main nav */}
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#1a1a2e] flex items-center justify-center rounded">
+              <Icon name="Shield" size={20} className="text-[#e8b84b]" />
+            </div>
+            <div>
+              <div className="font-montserrat font-800 text-lg leading-tight text-[#1a1a2e] font-extrabold">
+                ФОРТ КРЫМ
+              </div>
+              <div className="text-[10px] text-gray-500 tracking-widest uppercase leading-none">
+                Исторические экскурсии
+              </div>
+            </div>
+          </div>
+
+          <ul className="hidden md:flex items-center gap-1">
+            {NAV_LINKS.map(l => (
+              <li key={l.href}>
+                <a href={l.href}
+                  className="px-4 py-2 text-sm font-montserrat font-medium text-[#333] hover:text-[#1a1a2e] hover:bg-gray-100 rounded transition-colors">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <a href="#tours"
+            className="hidden md:inline-block px-5 py-2.5 bg-[#e8b84b] text-[#1a1a2e] text-sm font-montserrat font-bold rounded hover:bg-[#f5ca60] transition-colors">
+            Записаться
+          </a>
+
+          <button className="md:hidden text-[#1a1a2e]" onClick={() => setMenuOpen(!menuOpen)}>
+            <Icon name={menuOpen ? "X" : "Menu"} size={24} />
+          </button>
+        </div>
+      </header>
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#0e0e0e]/98 flex flex-col items-center justify-center gap-8">
+        <div className="fixed inset-0 z-40 bg-white flex flex-col pt-20 px-6 gap-2">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href}
-              className="font-cormorant text-3xl font-light tracking-widest uppercase text-[#e8e0d0] hover:text-[#c8a96e] transition-colors"
+              className="py-3 border-b border-gray-100 font-montserrat font-semibold text-[#1a1a2e] text-lg"
               onClick={() => setMenuOpen(false)}>
               {l.label}
             </a>
           ))}
+          <a href="#tours" className="mt-4 py-4 bg-[#e8b84b] text-[#1a1a2e] font-montserrat font-bold text-center rounded">
+            Записаться на экскурсию
+          </a>
         </div>
       )}
 
       {/* HERO */}
-      <section className="relative h-screen flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={HERO_IMG} alt="Форт Крым" className="w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{
-            background: "linear-gradient(to top, #0e0e0e 0%, rgba(14,14,14,0.5) 50%, rgba(14,14,14,0.2) 100%)"
-          }} />
-        </div>
-        <div className="relative z-10 px-6 md:px-16 pb-20 md:pb-28 max-w-5xl">
-          <p className="text-[#c8a96e] text-sm tracking-[0.3em] uppercase mb-4 font-golos">
-            Крым · с 1793 года
-          </p>
-          <h1 className="font-cormorant text-5xl md:text-8xl font-light leading-none mb-6 text-white">
-            Форт,<br />
-            <em className="italic text-[#c8a96e]">хранящий<br />историю</em>
-          </h1>
-          <p className="text-[#a09880] text-base md:text-lg max-w-lg leading-relaxed mb-10">
-            Два века военной истории Крыма. Экскурсии, исторические туры и незабываемые впечатления.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#tours"
-              className="inline-block px-8 py-4 bg-[#c8a96e] text-[#0e0e0e] text-sm tracking-widest uppercase font-semibold hover:bg-[#e2c48a] transition-colors duration-300 text-center">
-              Выбрать экскурсию
-            </a>
-            <a href="#about"
-              className="inline-block px-8 py-4 border border-[#c8a96e]/40 text-[#c8a96e] text-sm tracking-widest uppercase hover:border-[#c8a96e] transition-colors duration-300 text-center">
-              Узнать больше
-            </a>
-          </div>
-        </div>
-        <div className="absolute bottom-8 right-8 md:right-16 flex items-center gap-2 text-[#a09880] text-xs tracking-widest">
-          <span>Прокрутите вниз</span>
-          <Icon name="ArrowDown" size={14} />
-        </div>
-      </section>
-
-      {/* STATS STRIP */}
-      <section className="border-y border-[#2a2520] py-8">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[
-            { num: "1793", label: "Год основания" },
-            { num: "230+", label: "Лет истории" },
-            { num: "15 000", label: "Гостей в год" },
-            { num: "3", label: "Вида экскурсий" },
-          ].map(s => (
-            <div key={s.num}>
-              <div className="font-cormorant text-4xl md:text-5xl font-light text-[#c8a96e]">{s.num}</div>
-              <div className="text-xs text-[#6a6055] uppercase tracking-widest mt-1">{s.label}</div>
+      <section className="relative overflow-hidden bg-[#f5f0e8]">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-12 md:py-20 flex flex-col md:flex-row items-center gap-10">
+          <div className="flex-1 z-10">
+            <div className="inline-block bg-[#e8b84b]/20 text-[#b8860b] text-xs font-montserrat font-semibold px-3 py-1 rounded-full mb-4 tracking-wider uppercase">
+              Крым · с 1793 года
             </div>
-          ))}
+            <h1 className="font-montserrat text-4xl md:text-6xl font-extrabold leading-tight text-[#1a1a2e] mb-4">
+              Откройте историю<br />
+              <span className="text-[#e8b84b]">Форта Крым!</span>
+            </h1>
+            <p className="text-[#555] text-base md:text-lg leading-relaxed mb-6 max-w-lg">
+              Два века военной истории Крымского полуострова. Экскурсии для всей семьи, исторические туры и незабываемые впечатления.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a href="#tours"
+                className="px-8 py-4 bg-[#e8b84b] text-[#1a1a2e] font-montserrat font-bold text-sm rounded hover:bg-[#f5ca60] transition-colors text-center shadow-md">
+                Выбрать экскурсию
+              </a>
+              <a href="#about"
+                className="px-8 py-4 border-2 border-[#1a1a2e] text-[#1a1a2e] font-montserrat font-semibold text-sm rounded hover:bg-[#1a1a2e] hover:text-white transition-colors text-center">
+                О форте
+              </a>
+            </div>
+            <div className="flex items-center gap-6 mt-8">
+              {[
+                { num: "230+", label: "лет истории" },
+                { num: "15 000", label: "гостей в год" },
+                { num: "3", label: "вида туров" },
+              ].map(s => (
+                <div key={s.num} className="text-center">
+                  <div className="font-montserrat font-extrabold text-2xl text-[#1a1a2e]">{s.num}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 relative">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <img src={HERO_IMG} alt="Форт Крым" className="w-full aspect-[4/3] object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a2e]/40 to-transparent" />
+            </div>
+            <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg p-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#e8b84b] rounded-full flex items-center justify-center">
+                <Icon name="Star" size={18} className="text-[#1a1a2e]" />
+              </div>
+              <div>
+                <div className="font-montserrat font-bold text-sm">4.9 / 5.0</div>
+                <div className="text-xs text-gray-500">Рейтинг гостей</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="py-24 md:py-32">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-          <div>
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">О форте</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light leading-tight mb-6">
-              Свидетель трёх<br /><em className="italic">великих войн</em>
+      <section id="about" className="py-16 md:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">История</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-[#1a1a2e] mb-4">
+              О форте
             </h2>
-            <div className="w-12 h-px bg-[#c8a96e] mb-6" />
-            <p className="text-[#a09880] leading-relaxed mb-4">
-              Форт был возведён в конце XVIII века как часть стратегической оборонительной линии Крымского полуострова. Его каменные стены помнят Крымскую войну, две Мировые и десятки исторических событий.
-            </p>
-            <p className="text-[#a09880] leading-relaxed">
-              Сегодня форт — живой музей под открытым небом. Здесь сохранились подлинные казематы, артиллерийские позиции, подземные ходы и смотровые башни с панорамными видами на море.
-            </p>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
-          <div className="relative">
-            <img src={FORT_INTERIOR} alt="Интерьер форта"
-              className="w-full aspect-[4/5] object-cover" />
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 border border-[#c8a96e]/30" />
-            <div className="absolute -top-4 -right-4 w-16 h-16 border border-[#c8a96e]/20" />
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <img src={FORT_INTERIOR} alt="Интерьер форта" className="w-full rounded-2xl shadow-xl aspect-[4/3] object-cover" />
+              <div className="absolute top-4 left-4 bg-[#e8b84b] text-[#1a1a2e] font-montserrat font-bold px-4 py-2 rounded-lg text-sm shadow">
+                с 1793 года
+              </div>
+            </div>
+            <div>
+              <p className="text-gray-600 text-base leading-relaxed mb-4">
+                Форт был возведён в конце XVIII века как часть стратегической оборонительной линии Крымского полуострова. Его каменные стены помнят Крымскую войну, две Мировые и десятки исторических событий.
+              </p>
+              <p className="text-gray-600 text-base leading-relaxed mb-6">
+                Сегодня форт — живой музей под открытым небом. Здесь сохранились подлинные казематы, артиллерийские позиции, подземные ходы и смотровые башни с панорамными видами на море.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { icon: "Building2", label: "Подлинные казематы" },
+                  { icon: "Binoculars", label: "Смотровые башни" },
+                  { icon: "Compass", label: "Подземные ходы" },
+                  { icon: "Waves", label: "Вид на море" },
+                ].map((f, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-[#f5f0e8] rounded-xl p-3">
+                    <div className="w-8 h-8 bg-[#e8b84b] rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon name={f.icon} size={16} className="text-[#1a1a2e]" />
+                    </div>
+                    <span className="text-sm font-medium text-[#1a1a2e]">{f.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* TOURS */}
-      <section id="tours" className="py-24 md:py-32 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">Программы</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light">Экскурсии</h2>
+      <section id="tours" className="py-16 md:py-24 bg-[#f5f0e8]">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">Программы</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-[#1a1a2e] mb-4">Экскурсии</h2>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {TOURS.map((t, i) => (
-              <div key={i}
-                className="border border-[#2a2520] p-8 hover:border-[#c8a96e]/50 transition-colors duration-300 group">
-                <div className="w-10 h-10 flex items-center justify-center border border-[#c8a96e]/30 mb-6 group-hover:border-[#c8a96e] transition-colors">
-                  <Icon name={t.icon} size={18} className="text-[#c8a96e]" />
+              <div key={i} className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow p-7 flex flex-col">
+                <div className="w-14 h-14 bg-[#1a1a2e] rounded-xl flex items-center justify-center mb-5">
+                  <Icon name={t.icon} size={24} className="text-[#e8b84b]" />
                 </div>
-                <h3 className="font-cormorant text-2xl font-light mb-3">{t.title}</h3>
-                <div className="flex gap-4 mb-4">
-                  <span className="text-xs text-[#6a6055] flex items-center gap-1">
-                    <Icon name="Clock" size={12} /> {t.duration}
+                <h3 className="font-montserrat font-bold text-xl text-[#1a1a2e] mb-2">{t.title}</h3>
+                <div className="flex gap-3 mb-3">
+                  <span className="text-xs bg-[#f5f0e8] text-[#555] px-3 py-1 rounded-full flex items-center gap-1">
+                    <Icon name="Clock" size={11} /> {t.duration}
                   </span>
-                  <span className="text-xs text-[#6a6055] flex items-center gap-1">
-                    <Icon name="Users" size={12} /> {t.group}
+                  <span className="text-xs bg-[#f5f0e8] text-[#555] px-3 py-1 rounded-full flex items-center gap-1">
+                    <Icon name="Users" size={11} /> {t.group}
                   </span>
                 </div>
-                <p className="text-[#6a6055] text-sm leading-relaxed">{t.desc}</p>
-                <div className="mt-6 pt-6 border-t border-[#2a2520]">
-                  <button className="text-[#c8a96e] text-xs tracking-widest uppercase flex items-center gap-2 hover:gap-3 transition-all">
-                    Записаться <Icon name="ArrowRight" size={12} />
-                  </button>
-                </div>
+                <p className="text-gray-500 text-sm leading-relaxed flex-1">{t.desc}</p>
+                <button className="mt-5 w-full py-3 bg-[#e8b84b] text-[#1a1a2e] font-montserrat font-bold text-sm rounded-xl hover:bg-[#f5ca60] transition-colors">
+                  Записаться
+                </button>
               </div>
             ))}
           </div>
@@ -231,19 +292,20 @@ export default function Index() {
       </section>
 
       {/* GALLERY */}
-      <section id="gallery" className="py-24 md:py-32">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">Визуальная история</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light">Галерея</h2>
+      <section id="gallery" className="py-16 md:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">Фотографии</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-[#1a1a2e] mb-4">Галерея</h2>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {GALLERY_IMGS.map((img, i) => (
-              <div key={i} className="relative overflow-hidden group aspect-square">
+              <div key={i} className="relative overflow-hidden rounded-xl group aspect-square">
                 <img src={img.src} alt={img.caption}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-end p-3">
-                  <span className="text-white text-xs tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-[#1a1a2e]/0 group-hover:bg-[#1a1a2e]/50 transition-colors duration-300 flex items-end p-3">
+                  <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     {img.caption}
                   </span>
                 </div>
@@ -254,80 +316,96 @@ export default function Index() {
       </section>
 
       {/* PRICES */}
-      <section id="prices" className="py-24 md:py-32 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">Стоимость</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light">Цены</h2>
+      <section id="prices" className="py-16 md:py-24 bg-[#1a1a2e]">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">Стоимость</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-white mb-4">Цены</h2>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
-          <div className="grid md:grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 gap-3 max-w-3xl mx-auto">
             {PRICES.map((p, i) => (
-              <div key={i} className="flex items-center justify-between border border-[#2a2520] px-6 py-5 hover:border-[#c8a96e]/30 transition-colors">
+              <div key={i} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-6 py-4 hover:border-[#e8b84b]/50 transition-colors">
                 <div>
-                  <div className="text-[#e8e0d0] font-medium">{p.title}</div>
-                  {p.note && <div className="text-xs text-[#6a6055] mt-0.5">{p.note}</div>}
+                  <div className="text-white font-medium text-sm">{p.title}</div>
+                  {p.note && <div className="text-xs text-gray-400 mt-0.5">{p.note}</div>}
                 </div>
-                <div className="font-cormorant text-2xl font-light text-[#c8a96e]">{p.price}</div>
+                <div className="font-montserrat font-extrabold text-xl text-[#e8b84b]">{p.price}</div>
               </div>
             ))}
           </div>
-          <div className="mt-8 text-center">
-            <p className="text-[#6a6055] text-sm">Дети до 7 лет — бесплатно · Аудиогид включён в стоимость</p>
-          </div>
+          <p className="text-center text-gray-400 text-sm mt-6">Дети до 7 лет — бесплатно · Аудиогид включён в стоимость</p>
         </div>
       </section>
 
       {/* COMMENTS */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">Отзывы</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light">Что говорят гости</h2>
+      <section className="py-16 md:py-24 bg-[#f5f0e8]">
+        <div className="max-w-3xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">Отзывы</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-[#1a1a2e] mb-4">
+              Что говорят гости
+            </h2>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
 
-          {/* Comment Form */}
-          <form onSubmit={handleSubmit} className="border border-[#2a2520] p-6 md:p-8 mb-10">
-            <h3 className="font-cormorant text-2xl font-light mb-6">Оставить отзыв</h3>
-            <div className="mb-4">
-              <label className="text-xs text-[#6a6055] tracking-widest uppercase block mb-2">Ваше имя</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                className="w-full bg-transparent border border-[#2a2520] px-4 py-3 text-sm text-[#e8e0d0] focus:outline-none focus:border-[#c8a96e] transition-colors placeholder:text-[#3a3530]"
-                placeholder="Иван Иванов"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="text-xs text-[#6a6055] tracking-widest uppercase block mb-2">Ваш отзыв</label>
-              <textarea
-                value={form.text}
-                onChange={e => setForm({ ...form, text: e.target.value })}
-                rows={4}
-                className="w-full bg-transparent border border-[#2a2520] px-4 py-3 text-sm text-[#e8e0d0] focus:outline-none focus:border-[#c8a96e] transition-colors resize-none placeholder:text-[#3a3530]"
-                placeholder="Поделитесь впечатлениями о посещении..."
-              />
-            </div>
-            {submitted && (
-              <div className="mb-4 text-sm text-[#c8a96e] flex items-center gap-2">
-                <Icon name="CheckCircle" size={16} /> Спасибо за ваш отзыв!
+          {/* Form */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
+            <h3 className="font-montserrat font-bold text-xl text-[#1a1a2e] mb-5">Оставить отзыв</h3>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="text-xs font-montserrat font-semibold text-gray-500 uppercase tracking-wider block mb-1.5">Ваше имя</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={e => setForm({ ...form, name: e.target.value })}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a1a2e] focus:outline-none focus:border-[#e8b84b] transition-colors bg-gray-50"
+                  placeholder="Иван Иванов"
+                />
               </div>
-            )}
-            <button type="submit"
-              className="px-8 py-4 bg-[#c8a96e] text-[#0e0e0e] text-sm tracking-widest uppercase font-semibold hover:bg-[#e2c48a] transition-colors duration-300">
-              Отправить отзыв
-            </button>
-          </form>
-
-          {/* Comments List */}
-          <div className="space-y-6">
-            {comments.map((c, i) => (
-              <div key={i} className="border-l-2 border-[#c8a96e]/30 pl-6 py-2">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-cormorant text-lg font-light text-[#e8e0d0]">{c.name}</span>
-                  <span className="text-xs text-[#6a6055]">{c.date}</span>
+              <div className="mb-5">
+                <label className="text-xs font-montserrat font-semibold text-gray-500 uppercase tracking-wider block mb-1.5">Ваш отзыв</label>
+                <textarea
+                  value={form.text}
+                  onChange={e => setForm({ ...form, text: e.target.value })}
+                  rows={4}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1a1a2e] focus:outline-none focus:border-[#e8b84b] transition-colors resize-none bg-gray-50"
+                  placeholder="Поделитесь впечатлениями..."
+                />
+              </div>
+              {submitted && (
+                <div className="mb-4 text-sm text-green-600 flex items-center gap-2 bg-green-50 px-4 py-3 rounded-xl">
+                  <Icon name="CheckCircle" size={16} /> Спасибо за ваш отзыв!
                 </div>
-                <p className="text-[#a09880] text-sm leading-relaxed">{c.text}</p>
+              )}
+              <button type="submit"
+                className="w-full py-4 bg-[#e8b84b] text-[#1a1a2e] font-montserrat font-bold text-sm rounded-xl hover:bg-[#f5ca60] transition-colors shadow-md">
+                Отправить отзыв
+              </button>
+            </form>
+          </div>
+
+          {/* Comments */}
+          <div className="space-y-4">
+            {comments.map((c, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-sm p-5 md:p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#1a1a2e] rounded-full flex items-center justify-center text-[#e8b84b] font-montserrat font-bold text-sm flex-shrink-0">
+                      {c.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-montserrat font-bold text-sm text-[#1a1a2e]">{c.name}</div>
+                      <div className="flex gap-0.5 mt-0.5">
+                        {[1,2,3,4,5].map(s => (
+                          <Icon key={s} name="Star" size={10} className="text-[#e8b84b] fill-[#e8b84b]" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-400">{c.date}</span>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed">{c.text}</p>
               </div>
             ))}
           </div>
@@ -335,28 +413,27 @@ export default function Index() {
       </section>
 
       {/* CONTACTS */}
-      <section id="contacts" className="py-24 md:py-32 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <p className="text-[#c8a96e] text-xs tracking-[0.3em] uppercase mb-4">Как нас найти</p>
-            <h2 className="font-cormorant text-4xl md:text-6xl font-light">Контакты</h2>
+      <section id="contacts" className="py-16 md:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block text-[#e8b84b] text-xs font-montserrat font-semibold tracking-widest uppercase mb-2">Как нас найти</div>
+            <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-[#1a1a2e] mb-4">Контакты</h2>
+            <div className="w-16 h-1 bg-[#e8b84b] mx-auto" />
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
               { icon: "MapPin", title: "Адрес", lines: ["Республика Крым", "пос. Форт, д. 1"] },
               { icon: "Clock", title: "Режим работы", lines: ["Пн–Пт: 9:00–18:00", "Сб–Вс: 9:00–20:00"] },
               { icon: "Phone", title: "Телефон", lines: ["+7 (000) 000-00-00", "info@fort-krym.ru"] },
             ].map((c, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="w-10 h-10 border border-[#2a2520] flex items-center justify-center flex-shrink-0 mt-1">
-                  <Icon name={c.icon} size={16} className="text-[#c8a96e]" />
+              <div key={i} className="text-center bg-[#f5f0e8] rounded-2xl p-6">
+                <div className="w-12 h-12 bg-[#e8b84b] rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name={c.icon} size={20} className="text-[#1a1a2e]" />
                 </div>
-                <div>
-                  <div className="text-xs text-[#6a6055] tracking-widest uppercase mb-2">{c.title}</div>
-                  {c.lines.map((l, j) => (
-                    <div key={j} className="text-[#a09880] text-sm leading-relaxed">{l}</div>
-                  ))}
-                </div>
+                <div className="font-montserrat font-bold text-sm text-[#1a1a2e] mb-2">{c.title}</div>
+                {c.lines.map((l, j) => (
+                  <div key={j} className="text-gray-500 text-sm leading-relaxed">{l}</div>
+                ))}
               </div>
             ))}
           </div>
@@ -364,16 +441,29 @@ export default function Index() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-[#2a2520] py-8">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="font-cormorant text-lg text-[#c8a96e] tracking-[0.15em] uppercase">Форт Крым</span>
-          <span className="text-[#3a3530] text-xs">© 2026 Все права защищены</span>
-          <div className="flex gap-6">
-            {NAV_LINKS.map(l => (
-              <a key={l.href} href={l.href} className="text-xs text-[#3a3530] hover:text-[#6a6055] transition-colors">
-                {l.label}
-              </a>
-            ))}
+      <footer className="bg-[#1a1a2e] text-white py-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#e8b84b] flex items-center justify-center rounded">
+                <Icon name="Shield" size={20} className="text-[#1a1a2e]" />
+              </div>
+              <div>
+                <div className="font-montserrat font-extrabold text-lg">ФОРТ КРЫМ</div>
+                <div className="text-[10px] text-gray-400 tracking-widest uppercase">Исторические экскурсии</div>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-6">
+              {NAV_LINKS.map(l => (
+                <a key={l.href} href={l.href} className="text-sm text-gray-400 hover:text-[#e8b84b] transition-colors">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
+            <span className="text-gray-500 text-xs">© 2026 Форт Крым. Все права защищены.</span>
+            <span className="text-gray-500 text-xs">Крым, Россия</span>
           </div>
         </div>
       </footer>
